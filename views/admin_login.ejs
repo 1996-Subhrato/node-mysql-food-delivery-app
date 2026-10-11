@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin Login</title>
+    <style>
+        .error {
+            color: orangered !important;
+        }
+    </style>
+    <%- include('header-files-new') %>
+</head>
+<body class="hidden-bar-wrapper">
+
+<div class="page-wrapper">
+    <%- include('guest_navbar') %>
+
+    <%- include('bread-crumb') %>
+
+    <!-- Login Page Section -->
+    <section class="login-page-section" style="background-image: url(assets/images/background/pattern-11.png)">
+        <div class="auto-container">
+            <div class="col-md-6 offset-md-3">
+                <div class="card bg-dark">
+<!--                    <div class="card-header">-->
+<!--                        <h2 class="text-white">Admin Login</h2>-->
+<!--                    </div>-->
+                    <div class="card-body">
+                        <div class="newsletter-form">
+                            <form id="adminLogin">
+                                <div class="form-group mb-3">
+                                    <label class="text-white" for="email">Enter Email</label>
+                                    <input data-rule-required="true" value="admin@gmail.com"
+                                           type="email" id="email" name="email" class="form-control">
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="text-white" for="password">Enter Password</label>
+                                    <input data-rule-required="true" minlength="3" value="123"
+                                           type="password" id="password" name="password" class="form-control">
+                                </div>
+
+                                <div class="alert alert-secondary py-2 mb-3 text-center bg-dark border-secondary" style="font-size: 0.85rem; color: #C19D60;">
+                                    <i class="fa fa-info-circle"></i> <strong>Admin Credentials:</strong> <code>admin@gmail.com</code> | Password: <code>123</code>
+                                </div>
+
+                                <div class="mb-3">
+                                    <button onclick="AdminLogin()" type="button" class="theme-btn btn-style-two form-btn">
+                                        LOGIN
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Login Page Section -->
+
+    <%- include('footer') %>
+
+</div>
+
+<%- include("footer_scripts") %>
+
+<script>
+    var AdminLogin = () => {
+        $("#adminLogin").validate();
+
+        if ($("#adminLogin").valid()) {
+
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+
+            var formData = new FormData();
+            formData.append("email", email);
+            formData.append("password", password);
+
+            var http = new XMLHttpRequest();
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    // console.log(this.response);
+
+                    if (this.response == "invalid") {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Invalid Email or Password"
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Login Success"
+                        });
+
+                        setTimeout(() => {
+                            window.location.href = "/admin-home";
+                        }, 1000);
+                    }
+
+                }
+            }
+            http.open("POST", "/admin-login", true);
+            http.send(formData);
+        }
+    }
+</script>
+
+</body>
+</html>

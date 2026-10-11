@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin Dashboard | Aahar Food Service</title>
+    
+    <%- include('header-files-new') %>
+    
+    <!-- Google Font: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        :root {
+            --bg-base: #f8fafc;
+            --card-bg: #ffffff;
+            --card-hover: #ffffff;
+            --card-border: #e2e8f0;
+            --card-border-hover: #c19d60;
+            --brand-gold: #b48535;
+            --brand-gold-glow: rgba(180, 133, 53, 0.18);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --text-dim: #94a3b8;
+            --accent-emerald: #059669;
+            --accent-blue: #0284c7;
+            --accent-amber: #d97706;
+            --accent-purple: #7c3aed;
+            --accent-rose: #e11d48;
+        }
+
+        body {
+            background-color: var(--bg-base) !important;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+            color: var(--text-main) !important;
+            min-height: 100vh;
+        }
+
+        .dashboard-wrapper {
+            background: radial-gradient(circle at 95% 5%, rgba(193, 157, 96, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 5% 30%, rgba(2, 132, 199, 0.04) 0%, transparent 35%),
+                        var(--bg-base);
+            padding-bottom: 70px;
+        }
+
+        /* Clean SaaS Card Utility */
+        .saas-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 4px 14px -2px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .saas-card:hover {
+            border-color: rgba(193, 157, 96, 0.55);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.08), 0 0 16px var(--brand-gold-glow);
+        }
+
+        /* Header Hero */
+        .saas-hero {
+            padding: 36px 0 24px;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 32px;
+        }
+
+        .live-pulse {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ecfdf5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-ring 1.8s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        /* KPI Stat Cards */
+        .kpi-card {
+            padding: 24px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .kpi-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+
+        .kpi-value {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.1;
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+
+        .kpi-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .kpi-icon-gold {
+            background: #fef9ee;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+
+        .kpi-icon-emerald {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        .kpi-icon-blue {
+            background: #eff6ff;
+            color: #0284c7;
+            border: 1px solid #bae6fd;
+        }
+
+        .kpi-icon-purple {
+            background: #faf5ff;
+            color: #7c3aed;
+            border: 1px solid #e9d5ff;
+        }
+
+        .kpi-icon-amber {
+            background: #fffbeb;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+
+        .kpi-footer {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            padding-top: 14px;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Status Badge Pills */
+        .saas-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: capitalize;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .badge-assigned {
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        .badge-delivered {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .badge-cancelled {
+            background: #ffe4e6;
+            color: #9f1239;
+            border: 1px solid #fecdd3;
+        }
+
+        /* Buttons & Actions */
+        .btn-saas-primary {
+            background: linear-gradient(135deg, #c19d60, #a07a3c);
+            color: #ffffff !important;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 18px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(193, 157, 96, 0.3);
+            text-decoration: none !important;
+        }
+
+        .btn-saas-primary:hover {
+            background: linear-gradient(135deg, #b38b48, #8a652a);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(193, 157, 96, 0.45);
+            color: #ffffff !important;
+        }
+
+        .btn-saas-secondary {
+            background: #ffffff;
+            color: #334155 !important;
+            font-weight: 600;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 10px 18px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            text-decoration: none !important;
+        }
+
+        .btn-saas-secondary:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+            color: #0f172a !important;
+        }
+
+        /* Pipeline Visual Bars */
+        .pipeline-bar-wrapper {
+            background: #e2e8f0;
+            border-radius: 8px;
+            height: 10px;
+            overflow: hidden;
+            display: flex;
+            margin: 14px 0 16px;
+        }
+
+        .pipeline-seg {
+            height: 100%;
+            transition: width 0.6s ease;
+        }
+
+        /* Table Styling */
+        .saas-table {
+            width: 100%;
+            margin-bottom: 0;
+            color: var(--text-main);
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .saas-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--card-border);
+            white-space: nowrap;
+        }
+
+        .saas-table td {
+            padding: 14px 18px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.88rem;
+            color: #1e293b;
+            background: #ffffff;
+        }
+
+        .saas-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .saas-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Quick Action Grid Item */
+        .action-hub-item {
+            display: block;
+            padding: 20px;
+            border-radius: 14px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
+            text-decoration: none !important;
+            height: 100%;
+        }
+
+        .action-hub-item:hover {
+            background: #fffdfa;
+            border-color: var(--brand-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -4px rgba(180, 133, 53, 0.18);
+        }
+
+        .action-hub-item i {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--brand-gold);
+            display: block;
+        }
+
+        .action-hub-title {
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .action-hub-desc {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .dashboard-wrapper h1,
+        .dashboard-wrapper h2,
+        .dashboard-wrapper h3,
+        .dashboard-wrapper h4,
+        .dashboard-wrapper h5,
+        .dashboard-wrapper h6 {
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body class="hidden-bar-wrapper">
+
+<div class="page-wrapper dashboard-wrapper">
+    <%- include('navbar') %>
+
+    <div class="container-fluid px-lg-5">
+        
+        <!-- ===================================================================
+             1. HEADER HERO & CONTROLS
+             =================================================================== -->
+        <div class="saas-hero">
+            <div class="row align-items-center">
+                <div class="col-lg-7 mb-3 mb-lg-0">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <span class="live-pulse">
+                            <span class="pulse-dot"></span>
+                            Live System
+                        </span>
+                        <span class="text-muted" style="font-size: 0.85rem;" id="liveClock"></span>
+                    </div>
+                    <h1 class="h2 mb-1 font-weight-bold" style="letter-spacing: -0.5px; color: var(--text-main);">
+                        Welcome back, <span style="color: var(--brand-gold);"><%= name %></span>
+                    </h1>
+                    <p class="mb-0 text-muted" style="font-size: 0.92rem;">
+                        Real-time overview of Aahar food ordering operations, inventory, and delivery fleet.
+                    </p>
+                </div>
+                
+                <div class="col-lg-5 text-lg-right">
+                    <div class="d-flex flex-wrap justify-content-lg-end gap-2">
+                        <a href="/manage-product" class="btn-saas-primary">
+                            <i class="fa fa-plus-circle"></i> Add Dish
+                        </a>
+                        <a href="/admin/pending-orders" class="btn-saas-secondary">
+                            <i class="fa fa-motorcycle"></i> Dispatch Orders
+                        </a>
+                        <button onclick="location.reload()" class="btn-saas-secondary" title="Refresh Live Metrics">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================================
+             2. TOP-LEVEL STATS METRICS (KPIs)
+             =================================================================== -->
+        <div class="row g-4 mb-4">
+            
+            <!-- Card 1: Total Orders -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="saas-card kpi-card">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-title">Total Orders</div>
+                            <div class="kpi-value"><%= stats.orders.total %></div>
+                        </div>
+                        <div class="kpi-icon-wrapper kpi-icon-gold">
+                            <i class="fa fa-shopping-bag"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-footer">
+                        <span><strong style="color: #d97706;"><%= stats.orders.pending %></strong> Pending</span>
+                        <span>•</span>
+                        <span><strong style="color: #059669;"><%= stats.orders.delivered %></strong> Delivered</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Gross Sales Revenue -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="saas-card kpi-card">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-title">Total Revenue</div>
+                            <div class="kpi-value">&#x20b9;<%= (stats.orders.revenue || 0).toLocaleString('en-IN') %></div>
+                        </div>
+                        <div class="kpi-icon-wrapper kpi-icon-emerald">
+                            <i class="fa fa-inr"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-footer">
+                        <span style="color: #059669;"><i class="fa fa-check-circle"></i> Realized Earnings</span>
+                        <span>Payment: Complete</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Food Catalog (Products & Categories) -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="saas-card kpi-card">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-title">Menu Inventory</div>
+                            <div class="kpi-value"><%= stats.productsCount %> <span style="font-size: 1.1rem; font-weight: 600; color: var(--text-muted);">Dishes</span></div>
+                        </div>
+                        <div class="kpi-icon-wrapper kpi-icon-blue">
+                            <i class="fa fa-cutlery"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-footer">
+                        <span><%= stats.categoriesCount %> Categories</span>
+                        <span>•</span>
+                        <span><%= stats.subcategoriesCount %> Sub-Categories</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Delivery Boy Fleet -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="saas-card kpi-card">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-title">Delivery Fleet</div>
+                            <div class="kpi-value"><%= stats.deliveryBoys.total %> <span style="font-size: 1.1rem; font-weight: 600; color: var(--text-muted);">Riders</span></div>
+                        </div>
+                        <div class="kpi-icon-wrapper kpi-icon-purple">
+                            <i class="fa fa-bicycle"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-footer">
+                        <span><strong style="color: #059669;"><%= stats.deliveryBoys.available %></strong> Available</span>
+                        <span>•</span>
+                        <span><strong style="color: #0284c7;"><%= stats.deliveryBoys.assigned %></strong> Active Runs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================================
+             3. PIPELINE METRICS & FLEET BREAKDOWN (SAAS CARDS)
+             =================================================================== -->
+        <div class="row g-4 mb-4">
+            
+            <!-- Order Pipeline Lifecycle Card -->
+            <div class="col-lg-7 mb-4">
+                <div class="saas-card p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <h5 class="mb-1 font-weight-bold" style="color: var(--text-main);">Order Fulfillment Pipeline</h5>
+                            <p class="mb-0 text-muted" style="font-size: 0.85rem;">Status distribution of kitchen orders</p>
+                        </div>
+                        <a href="/admin/pending-orders" style="color: #b45309; font-size: 0.82rem; font-weight: 700; text-decoration: none;">
+                            View Pipeline <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <% 
+                        const totalOrders = stats.orders.total > 0 ? stats.orders.total : 1;
+                        const pendingPct = Math.round((stats.orders.pending / totalOrders) * 100);
+                        const assignedPct = Math.round((stats.orders.assigned / totalOrders) * 100);
+                        const deliveredPct = Math.round((stats.orders.delivered / totalOrders) * 100);
+                        const cancelledPct = Math.round((stats.orders.cancelled / totalOrders) * 100);
+                    %>
+
+                    <!-- Visual Segmented Bar -->
+                    <div class="pipeline-bar-wrapper">
+                        <div class="pipeline-seg" style="width: <%= pendingPct %>%; background: #f59e0b;" title="Pending: <%= stats.orders.pending %>"></div>
+                        <div class="pipeline-seg" style="width: <%= assignedPct %>%; background: #0284c7;" title="Assigned: <%= stats.orders.assigned %>"></div>
+                        <div class="pipeline-seg" style="width: <%= deliveredPct %>%; background: #10b981;" title="Delivered: <%= stats.orders.delivered %>"></div>
+                        <div class="pipeline-seg" style="width: <%= cancelledPct %>%; background: #f43f5e;" title="Cancelled: <%= stats.orders.cancelled %>"></div>
+                    </div>
+
+                    <!-- Breakdown Cards Grid -->
+                    <div class="row g-2 text-center pt-2">
+                        <div class="col-3">
+                            <a href="/admin/pending-orders" class="text-decoration-none">
+                                <div class="p-3 rounded" style="background: #fffbeb; border: 1px solid #fde68a;">
+                                    <div class="font-weight-bold h4 mb-0" style="color: #d97706;"><%= stats.orders.pending %></div>
+                                    <small class="font-weight-bold text-uppercase" style="font-size: 0.72rem; color: #92400e;">Pending</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/admin/assigned-orders" class="text-decoration-none">
+                                <div class="p-3 rounded" style="background: #eff6ff; border: 1px solid #bfdbfe;">
+                                    <div class="font-weight-bold h4 mb-0" style="color: #0284c7;"><%= stats.orders.assigned %></div>
+                                    <small class="font-weight-bold text-uppercase" style="font-size: 0.72rem; color: #1e40af;">Assigned</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/admin/delivered-orders" class="text-decoration-none">
+                                <div class="p-3 rounded" style="background: #ecfdf5; border: 1px solid #a7f3d0;">
+                                    <div class="font-weight-bold h4 mb-0" style="color: #059669;"><%= stats.orders.delivered %></div>
+                                    <small class="font-weight-bold text-uppercase" style="font-size: 0.72rem; color: #065f46;">Delivered</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-3 rounded" style="background: #fff1f2; border: 1px solid #fecdd3;">
+                                <div class="font-weight-bold h4 mb-0" style="color: #e11d48;"><%= stats.orders.cancelled %></div>
+                                <small class="font-weight-bold text-uppercase" style="font-size: 0.72rem; color: #9f1239;">Cancelled</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fleet Utilization Card -->
+            <div class="col-lg-5 mb-4">
+                <div class="saas-card p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <h5 class="mb-1 font-weight-bold" style="color: var(--text-main);">Fleet Operations</h5>
+                            <p class="mb-0 text-muted" style="font-size: 0.85rem;">Delivery personnel availability</p>
+                        </div>
+                        <a href="/admin/manage-delivery-boy" style="color: #0284c7; font-size: 0.82rem; font-weight: 700; text-decoration: none;">
+                            Manage Fleet <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <% 
+                        const totalRiders = stats.deliveryBoys.total > 0 ? stats.deliveryBoys.total : 1;
+                        const availableRiderPct = Math.round((stats.deliveryBoys.available / totalRiders) * 100);
+                    %>
+
+                    <div class="p-3 mb-3 rounded d-flex align-items-center justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="kpi-icon-wrapper kpi-icon-emerald" style="width: 40px; height: 40px;">
+                                <i class="fa fa-check"></i>
+                            </div>
+                            <div>
+                                <div class="font-weight-bold" style="color: var(--text-main);">Ready for Dispatch</div>
+                                <small class="text-muted"><%= stats.deliveryBoys.available %> of <%= stats.deliveryBoys.total %> riders standing by</small>
+                            </div>
+                        </div>
+                        <span class="badge-delivered saas-badge"><%= availableRiderPct %>% Ready</span>
+                    </div>
+
+                    <div class="p-3 rounded d-flex align-items-center justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="kpi-icon-wrapper kpi-icon-blue" style="width: 40px; height: 40px;">
+                                <i class="fa fa-road"></i>
+                            </div>
+                            <div>
+                                <div class="font-weight-bold" style="color: var(--text-main);">On Active Delivery</div>
+                                <small class="text-muted"><%= stats.deliveryBoys.assigned %> riders dispatched</small>
+                            </div>
+                        </div>
+                        <span class="badge-assigned saas-badge"><%= stats.deliveryBoys.assigned %> Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================================
+             4. RECENT ORDERS & LIVE ACTIVITY STREAM
+             =================================================================== -->
+        <div class="saas-card mb-4">
+            <div class="p-4 border-bottom" style="border-color: #e2e8f0 !important; background: #ffffff;">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div>
+                        <h5 class="mb-1 font-weight-bold" style="color: var(--text-main);">
+                            <i class="fa fa-history mr-2" style="color: #d97706;"></i> Recent Order Activity
+                        </h5>
+                        <p class="mb-0 text-muted" style="font-size: 0.85rem;">Live orders placed through storefront</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="/admin/pending-orders" class="btn-saas-secondary" style="padding: 6px 14px; font-size: 0.8rem;">
+                            View All Orders (<%= stats.orders.total %>)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="saas-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer Info</th>
+                            <th>Order Date</th>
+                            <th>Amount</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (stats.recentOrders && stats.recentOrders.length > 0) { %>
+                            <% stats.recentOrders.forEach((ord) => { %>
+                                <tr>
+                                    <td>
+                                        <span class="font-weight-bold font-mono" style="color: var(--text-main);">#ORD-<%= ord.id %></span>
+                                    </td>
+                                    <td>
+                                        <div class="font-weight-semibold" style="color: var(--text-main);"><%= ord.customer_name || ord.username %></div>
+                                        <div class="text-muted" style="font-size: 0.78rem;">
+                                            <i class="fa fa-phone"></i> <%= ord.customer_mobile || 'No contact' %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted" style="font-size: 0.82rem;"><%= ord.formatted_date || ord.date_time %></span>
+                                    </td>
+                                    <td>
+                                        <span class="font-weight-bold" style="color: #b45309; font-size: 0.95rem;">
+                                            &#x20b9;<%= ord.grand_total %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <span class="font-weight-bold" style="font-size: 0.82rem; color: #334155;"><%= ord.payment_mode %></span>
+                                            <% if (ord.payment_status === 'Paid') { %>
+                                                <span class="ml-1" style="color: #059669;"><i class="fa fa-check-circle" title="Paid"></i></span>
+                                            <% } else { %>
+                                                <span class="ml-1" style="color: #d97706;"><i class="fa fa-clock-o" title="Pending"></i></span>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <% if (ord.order_status === 'Pending') { %>
+                                            <span class="saas-badge badge-pending">
+                                                <i class="fa fa-clock-o"></i> Pending
+                                            </span>
+                                        <% } else if (ord.order_status === 'Assigned') { %>
+                                            <span class="saas-badge badge-assigned">
+                                                <i class="fa fa-motorcycle"></i> Assigned
+                                            </span>
+                                        <% } else if (ord.order_status === 'Delivered') { %>
+                                            <span class="saas-badge badge-delivered">
+                                                <i class="fa fa-check"></i> Delivered
+                                            </span>
+                                        <% } else { %>
+                                            <span class="saas-badge badge-cancelled">
+                                                <i class="fa fa-times"></i> <%= ord.order_status %>
+                                            </span>
+                                        <% } %>
+                                    </td>
+                                    <td class="text-right">
+                                        <a href="/admin/order-details?id=<%= ord.id %>" class="btn btn-sm" style="font-size: 0.78rem; border-radius: 8px; border: 1px solid #cbd5e1; color: #334155; background: #ffffff;">
+                                            Details <i class="fa fa-chevron-right ml-1"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="7" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="fa fa-shopping-basket text-muted mb-3" style="font-size: 2.5rem; opacity: 0.35;"></i>
+                                        <h6 class="font-weight-bold" style="color: var(--text-main);">No Orders Placed Yet</h6>
+                                        <p class="text-muted mb-3" style="font-size: 0.85rem;">Orders placed by registered customers will appear here in real time.</p>
+                                        <a href="/menu" target="_blank" class="btn btn-sm btn-outline-warning">
+                                            Open Client Storefront <i class="fa fa-external-link"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ===================================================================
+             5. QUICK ACTION HUB (SAAS SHORTCUT PANELS)
+             =================================================================== -->
+        <h5 class="font-weight-bold mb-3" style="color: var(--text-main);">
+            <i class="fa fa-th-large mr-2" style="color: #b45309;"></i> Management Control Shortcuts
+        </h5>
+        <div class="row g-3">
+            
+            <div class="col-lg-2 col-md-4 col-6 mb-3">
+                <a href="/manage-category" class="action-hub-item">
+                    <i class="fa fa-tags"></i>
+                    <div class="action-hub-title">Categories</div>
+                    <div class="action-hub-desc"><%= stats.categoriesCount %> Cuisines & Types</div>
+                </a>
+            </div>
+
+            <div class="col-lg-2 col-md-4 col-6 mb-3">
+                <a href="/manage-sub-category" class="action-hub-item">
+                    <i class="fa fa-sitemap"></i>
+                    <div class="action-hub-title">Sub-Categories</div>
+                    <div class="action-hub-desc"><%= stats.subcategoriesCount %> Classifications</div>
+                </a>
+            </div>
+
+            <div class="col-lg-2 col-md-4 col-6 mb-3">
+                <a href="/manage-product" class="action-hub-item">
+                    <i class="fa fa-cutlery"></i>
+                    <div class="action-hub-title">Food Menu</div>
+                    <div class="action-hub-desc"><%= stats.productsCount %> Active Dishes</div>
+                </a>
+            </div>
+
+            <div class="col-lg-2 col-md-4 col-6 mb-3">
+                <a href="/admin/manage-delivery-boy" class="action-hub-item">
+                    <i class="fa fa-motorcycle"></i>
+                    <div class="action-hub-title">Fleet Staff</div>
+                    <div class="action-hub-desc"><%= stats.deliveryBoys.total %> Registered Riders</div>
+                </a>
+            </div>
+
+            <div class="col-lg-2 col-md-4 col-6 mb-3">
+                <a href="/admin/pending-orders" class="action-hub-item">
+                    <i class="fa fa-clock-o"></i>
+                    <div class="action-hub-title">Dispatch Hub</div>
+                    <div class="action-hub-desc"><%= stats.orders.pending %> Pending Orders</div>
+                </a>
+            </div>
+
+            <div class="col-lg-2 col-md-4 col-6 mb-3">
+                <a href="/admin-change-password" class="action-hub-item">
+                    <i class="fa fa-shield"></i>
+                    <div class="action-hub-title">Security</div>
+                    <div class="action-hub-desc">Update Admin Credentials</div>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <%- include('footer') %>
+</div>
+
+<%- include("footer_scripts") %>
+
+<script>
+    // Live date and clock display
+    function updateClock() {
+        const now = new Date();
+        const options = { 
+            weekday: 'short', 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric',
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+        };
+        const el = document.getElementById('liveClock');
+        if (el) {
+            el.textContent = now.toLocaleDateString('en-US', options);
+        }
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>
